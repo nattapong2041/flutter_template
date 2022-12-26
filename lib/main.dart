@@ -76,7 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
-    context.read<LocaleViewModel>().login();
+    context.read<LocaleViewModel>().listStaff();
+
     if (context.read<LocaleViewModel>().locale == const Locale('th', '')) {
       context.read<LocaleViewModel>().set(const Locale('en', ''));
     } else {

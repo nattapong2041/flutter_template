@@ -11,6 +11,7 @@ A Template for flutter project.
 <a name="contact"></a>
 ## Confuse somthing in project 
 contact me: nattapong@dosetech.co
+or nattapong.guitar@outlook.com
 
 <a name="localizations"></a>
 ## Localization 
@@ -33,26 +34,34 @@ context.read<LocaleViewModel>().set(const Locale('en', ''));
 
 <a name="modelgen"></a>
 ## Model generate 
-ref:https://pub.dev/packages/freezed#how-to-use
+ref:https://pub.dev/packages/json_serializable
 
-<p>by using this method just write a simple line of code and then the generator will generate file for work with JSON with include</p> 
+ref:https://docs.flutter.dev/development/data-and-backend/json#serializing-json-using-code-generation-libraries
 
-- define a constructor + the properties
+<p>by using this method just write a simple line of code and then the generator will generate file for work with JSON.</p> 
 
-- override toString, operator ==, hashCode
-
-- implement a copyWith method to clone the object
-
-- handling de/serialization
-
-create model by following "lib/base/base_model.dart" file
-
-use freezed for immutable and unfreezed for mutable class
+Example with login service
 ```
-@freezed
-@unfreezed
+must extends base request/response class
+
+@JsonSerializable()
+class LoginServiceRequest extends BaseRequest {
+    /// some code
+}
+```
+use @JsonKey for modify eg. You can define variable that not the same as json key if need.
+
+For example JsonKey Username will store in id variable
+
+```
+@JsonKey(name: 'Username')
+String id;
 ```
 after finished write model run the generator 
 ```
 flutter pub run build_runner build
+```
+or this if conflict occured when builde.
+```
+flutter pub run build_runner build --delete-conflicting-outputs
 ```

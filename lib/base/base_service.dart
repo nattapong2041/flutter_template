@@ -7,15 +7,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 enum HttpMethod { post, get }
 
-enum ServiceUrl {
-  login,
-}
+enum UrlType { deufaultUrl, urlWithUnencodePath, absoluteUrl }
+
+enum ServiceUrl { login, listStaff }
 
 extension AppUrl on ServiceUrl {
   String get fullUrl {
     switch (this) {
       case ServiceUrl.login:
         return "/account/login";
+      case ServiceUrl.listStaff:
+        return "/staff/list";
       default:
         return toString();
     }
@@ -26,6 +28,11 @@ class AppService {
   //use witg config api path
   static String getUrl(ServiceUrl url) {
     return Config.apiService + url.fullUrl;
+  }
+
+  //use witg config api path
+  static String getUrlWithUnencodePath(ServiceUrl url, String params) {
+    return Config.apiService + url.fullUrl + params;
   }
 
   //other paths that not set in config
@@ -42,10 +49,20 @@ class BaseService {
     'API-KEY': Config.apiKey,
   };
 
-  Future<String> execute(
-      ServiceUrl url, Map<String, dynamic> request, HttpMethod method,
-      {bool needAuth = true}) async {
-    String finalUrl = AppService.getUrl(url);
+  Future<String> execute(ServiceUrl url,
+      {required Map<String, dynamic> request,
+      required HttpMethod method,
+      UrlType urlType = UrlType.deufaultUrl,
+      String? unencodePath,
+      bool needAuth = true}) async {
+    String finalUrl = '';
+    if (urlType == UrlType.urlWithUnencodePath) {
+      finalUrl = AppService.getUrlWithUnencodePath(url, unencodePath ?? '');
+    } else if (urlType == UrlType.absoluteUrl) {
+      finalUrl = AppService.getAbsoluteUrl(url);
+    } else {
+      finalUrl = AppService.getUrl(url);
+    }
     try {
       var response = await _executeRequest(finalUrl, request, method,
           header: _header, needAuth: needAuth);
@@ -85,8 +102,8 @@ class BaseService {
           return value == null;
         });
         log("header : $header");
-        log("request body: ${jsonEncode(request)}");
         log("url: $url");
+        log("request body: ${jsonEncode(request)}");
         var response = await client.post(Uri.parse(url),
             headers: header, body: jsonEncode(request));
         return response;

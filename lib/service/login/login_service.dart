@@ -1,44 +1,62 @@
-// This file is "base_model.dart"
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_template/base/base_service.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'login_service.freezed.dart';
+import '../../base/base_model.dart';
+
 part 'login_service.g.dart';
 
 class LoginService extends BaseService {
   Future<LoginServiceResponse> callService(LoginServiceRequest request) {
-    return execute(ServiceUrl.login, request.toJson(), HttpMethod.post,
-            needAuth: false)
+    log('exceute service: ${request.service}');
+    return execute(ServiceUrl.login,
+            request: request.toJson(), method: HttpMethod.post, needAuth: false)
         .then((resp) {
       return LoginServiceResponse.fromJson(jsonDecode(resp));
     });
   }
 }
 
-@freezed
-class LoginServiceRequest with _$LoginServiceRequest {
-  const factory LoginServiceRequest({
-    required String Username,
-    required String Password,
-  }) = _LoginServiceRequest;
+@JsonSerializable()
+class LoginServiceRequest extends BaseRequest {
+  LoginServiceRequest({required this.username, required this.password})
+      : super(service: "LoginServiceRequest");
 
-  factory LoginServiceRequest.fromJson(Map<String, Object?> json) =>
+  @JsonKey(name: 'Username')
+  String username;
+
+  @JsonKey(name: 'Password')
+  String password;
+
+  /// A necessary factory constructor for creating a new User instance
+  /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
+  /// The constructor is named after the source class, in this case, User.
+  factory LoginServiceRequest.fromJson(Map<String, dynamic> json) =>
       _$LoginServiceRequestFromJson(json);
+
+  /// `toJson` is the convention for a class to declare support for serialization
+  /// to JSON. The implementation simply calls the private, generated
+  /// helper method `_$UserToJson`.
+  Map<String, dynamic> toJson() => _$LoginServiceRequestToJson(this);
 }
 
-@freezed
-class LoginServiceResponse with _$LoginServiceResponse {
-  const factory LoginServiceResponse({
-    int? result,
-    String? message,
-    bool? token,
-    int? loginProvider,
-    String? detail,
-  }) = _LoginServiceResponse;
+@JsonSerializable()
+class LoginServiceResponse extends BaseResponse {
+  LoginServiceResponse(this.detail);
 
-  factory LoginServiceResponse.fromJson(Map<String, Object?> json) =>
+  @JsonKey(name: 'detail')
+  String? detail;
+
+  /// A necessary factory constructor for creating a new User instance
+  /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
+  /// The constructor is named after the source class, in this case, User.
+  factory LoginServiceResponse.fromJson(Map<String, dynamic> json) =>
       _$LoginServiceResponseFromJson(json);
+
+  /// `toJson` is the convention for a class to declare support for serialization
+  /// to JSON. The implementation simply calls the private, generated
+  /// helper method `_$UserToJson`.
+  Map<String, dynamic> toJson() => _$LoginServiceResponseToJson(this);
 }
