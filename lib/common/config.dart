@@ -1,4 +1,4 @@
-class Config {
+abstract class Config {
   static const String apiService =
       'https://tnl-warehouse-api-dev.dosetech.co/api';
   static const String apiKey = 'EC0mmErCeAp1KeY';

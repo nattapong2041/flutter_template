@@ -116,17 +116,14 @@ class BaseService {
   }
 
   String _generateQueryString(Map<String, dynamic> request) {
-    log("request ${request.toString()}");
     String result = "";
     request.forEach((key, value) {
-      log("$key , $value");
       if (value != null) {
         result += "$key=$value";
         result += "&";
       }
     });
     result = result.substring(0, result.length - 1);
-    log("result ${result.toString()}");
     return result;
   }
 }

@@ -17,7 +17,7 @@ class ListStaffService extends BaseService {
             urlType: UrlType.urlWithUnencodePath,
             request: request.toJson(),
             method: HttpMethod.get,
-            needAuth: false)
+            needAuth: true)
         .then((resp) {
       return ListStaffServiceResponse.fromJson(jsonDecode(resp));
     });
