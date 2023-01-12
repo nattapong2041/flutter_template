@@ -66,7 +66,9 @@ class BaseService {
     try {
       var response = await _executeRequest(finalUrl, request, method,
           header: _header, needAuth: needAuth);
-
+      log("********** result **********");
+      log('response code: ${response.statusCode}');
+      log('response body: ${response.body}');
       if (response.statusCode == 200) {
         return response.body;
       } else {

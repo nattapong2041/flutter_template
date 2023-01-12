@@ -11,7 +11,7 @@ part 'list_staff_service.g.dart';
 class ListStaffService extends BaseService {
   Future<ListStaffServiceResponse> callService(
       ListStaffServiceRequest request) {
-    log('exceute service: ${request.service}');
+    log('execute service: ${request.service}');
     return execute(ServiceUrl.listStaff,
             unencodePath: '/${request.userId}',
             urlType: UrlType.urlWithUnencodePath,
@@ -68,10 +68,10 @@ class ListStaffServiceResponse extends BaseResponse {
 
 @JsonSerializable()
 class ListStaffResult {
-  ListStaffResult(this.resutl);
+  ListStaffResult(this.listStaff);
 
   @JsonKey(name: 'result')
-  List<ListStaff>? resutl;
+  List<Staff>? listStaff;
 
   factory ListStaffResult.fromJson(Map<String, dynamic> json) =>
       _$ListStaffResultFromJson(json);
@@ -80,8 +80,8 @@ class ListStaffResult {
 }
 
 @JsonSerializable()
-class ListStaff {
-  ListStaff(this.id, this.staffNo, this.gender, this.firstName, this.lastName,
+class Staff {
+  Staff(this.id, this.staffNo, this.gender, this.firstName, this.lastName,
       this.isActive);
 
   @JsonKey(name: 'id')
@@ -102,8 +102,7 @@ class ListStaff {
   @JsonKey(name: 'isActive')
   int? isActive;
 
-  factory ListStaff.fromJson(Map<String, dynamic> json) =>
-      _$ListStaffFromJson(json);
+  factory Staff.fromJson(Map<String, dynamic> json) => _$StaffFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ListStaffToJson(this);
+  Map<String, dynamic> toJson() => _$StaffToJson(this);
 }

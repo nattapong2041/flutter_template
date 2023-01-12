@@ -43,16 +43,16 @@ Map<String, dynamic> _$ListStaffServiceResponseToJson(
 ListStaffResult _$ListStaffResultFromJson(Map<String, dynamic> json) =>
     ListStaffResult(
       (json['result'] as List<dynamic>?)
-          ?.map((e) => ListStaff.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => Staff.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$ListStaffResultToJson(ListStaffResult instance) =>
     <String, dynamic>{
-      'result': instance.resutl,
+      'result': instance.listStaff,
     };
 
-ListStaff _$ListStaffFromJson(Map<String, dynamic> json) => ListStaff(
+Staff _$StaffFromJson(Map<String, dynamic> json) => Staff(
       json['id'] as int?,
       json['staffNo'] as String?,
       json['gender'] as String?,
@@ -61,7 +61,7 @@ ListStaff _$ListStaffFromJson(Map<String, dynamic> json) => ListStaff(
       json['isActive'] as int?,
     );
 
-Map<String, dynamic> _$ListStaffToJson(ListStaff instance) => <String, dynamic>{
+Map<String, dynamic> _$StaffToJson(Staff instance) => <String, dynamic>{
       'id': instance.id,
       'staffNo': instance.staffNo,
       'gender': instance.gender,

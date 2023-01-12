@@ -1,7 +1,9 @@
 {
+    "appTitle": "Flutter Template",
     
-    "helloWorld": "Hello World!",
-    "@helloWorld": {
-      "description": "The conventional newborn programmer greeting"
-    }
+    "alertOk": "Ok",
+    "@alertOk": {
+      "description": "For use with alert"
+    },
+    "alertCancle": "Cancle"
 }

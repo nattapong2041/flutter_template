@@ -1,3 +1,6 @@
 {
-    "helloWorld": "สวัสดีชาวโลก!"
+    "appTitle": "Flutter Template",
+    
+    "alertOk": "ตกลง",
+    "alertCancle": "ยกเลิก"
 }

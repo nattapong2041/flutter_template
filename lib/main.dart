@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_template/extension/colors.dart';
+import 'package:flutter_template/extension/text_style.dart';
+import 'package:flutter_template/screen/main/main_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'localization/locale_view_model.dart';
-import 'screen/home/view/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +23,7 @@ class MyApp extends StatelessWidget {
       child:
           Consumer<LocaleViewModel>(builder: (context, localeViewModel, child) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           localizationsDelegates: const [
             AppLocalizations.delegate,
@@ -34,19 +37,27 @@ class MyApp extends StatelessWidget {
           ],
           locale: localeViewModel.locale,
           theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
-            primarySwatch: Colors.blue,
+            extensions: <ThemeExtension<dynamic>>[
+              AppColors(
+                primaryColor: HexColor.fromHex("#000000"),
+                danger: HexColor.fromHex("#000000"),
+              ),
+              const AppTextTheme(
+                kanitNormalText: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Kanit',
+                ),
+                kanitBoldText: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Kanit',
+                ),
+              ),
+            ],
           ),
           routes: {
-            '/': (context) => const HomeScreen(),
+            '/': (context) => const MainScreen(),
           },
           initialRoute: '/',
         );

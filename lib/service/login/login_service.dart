@@ -10,7 +10,7 @@ part 'login_service.g.dart';
 
 class LoginService extends BaseService {
   Future<LoginServiceResponse> callService(LoginServiceRequest request) {
-    log('exceute service: ${request.service}');
+    log('execute service: ${request.service}');
     return execute(ServiceUrl.login,
             request: request.toJson(), method: HttpMethod.post, needAuth: false)
         .then((resp) {
