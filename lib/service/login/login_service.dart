@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter_template/base/base_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../base/base_model.dart';
+import '../../base/base_service.dart';
 
 part 'login_service.g.dart';
 

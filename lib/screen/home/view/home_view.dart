@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/base/base_screen.dart';
-import 'package:flutter_template/extension/colors.dart';
-import 'package:flutter_template/screen/home/viewModel/home_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../../base/base_screen.dart';
 import '../../../common/widget/default_appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../extension/colors.dart';
+import '../viewModel/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/extension/colors.dart';
 import 'package:provider/provider.dart';
 
+import '../../extension/colors.dart';
 import '../home/view/home_view.dart';
 import '../home/viewModel/home_view_model.dart';
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_template/extension/colors.dart';
-import 'package:flutter_template/extension/text_style.dart';
+
+import '../extension/colors.dart';
+import '../extension/text_style.dart';
 
 abstract class BaseScreen {
   CircularProgressIndicator defaultLoading() {

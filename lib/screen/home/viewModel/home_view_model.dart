@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/base/pagination.dart';
-import 'package:flutter_template/service/login/list_staff_service.dart';
-import 'package:flutter_template/service/login/login_service.dart';
+
+import '../../../base/pagination.dart';
+import '../../../service/login/list_staff_service.dart';
+import '../../../service/login/login_service.dart';
 
 class HomeViewModel extends ChangeNotifier {
   bool _isLoading = false;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_template/extension/colors.dart';
-import 'package:flutter_template/extension/text_style.dart';
-import 'package:flutter_template/screen/main/main_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'extension/colors.dart';
+import 'extension/text_style.dart';
 import 'localization/locale_view_model.dart';
+import 'screen/main/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
