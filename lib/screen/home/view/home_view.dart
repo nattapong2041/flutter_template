@@ -22,6 +22,12 @@ class _HomeViewState extends State<HomeView>
   @override
   void initState() {
     super.initState();
+    Future.microtask(
+      () {
+        defaultAlertDialog(
+            context: context, title: "title", message: "message");
+      },
+    );
   }
 
   @override
@@ -43,8 +49,8 @@ class _HomeViewState extends State<HomeView>
   }
 }
 
-class ListEmpty extends StatelessWidget {
-  const ListEmpty({super.key});
+class _ListEmpty extends StatelessWidget {
+  const _ListEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +84,7 @@ class _ListStaff extends StatelessWidget with BaseScreen {
               kToolbarHeight -
               kBottomNavigationBarHeight,
           child: viewModel.listStaff.isEmpty
-              ? const ListEmpty()
+              ? const _ListEmpty()
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

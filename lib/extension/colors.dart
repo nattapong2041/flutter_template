@@ -21,10 +21,10 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color? danger;
 
   @override
-  ThemeExtension<AppColors> copyWith() {
+  ThemeExtension<AppColors> copyWith({Color? primaryColor, Color? danger}) {
     return AppColors(
-      primaryColor: primaryColor,
-      danger: danger,
+      primaryColor: primaryColor ?? this.primaryColor,
+      danger: danger ?? this.danger,
     );
   }
 

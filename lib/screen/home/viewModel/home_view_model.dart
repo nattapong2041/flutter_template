@@ -5,13 +5,20 @@ import 'package:flutter_template/service/login/login_service.dart';
 
 class HomeViewModel extends ChangeNotifier {
   bool _isLoading = false;
-  Pagination staffPagination = Pagination(size: 20);
-  List<Staff> listStaff = [];
+  Pagination _staffPagination = Pagination(size: 20);
+  List<Staff> _listStaff = [];
 
   HomeViewModel() {
     fetchListStaff(shouldRefresh: true);
   }
+
   bool get isLoading => _isLoading;
+  List<Staff> get listStaff => _listStaff;
+
+  set listStaff(List<Staff> list) {
+    _listStaff = list;
+    notifyListeners();
+  }
 
   Future<void> login() async {
     LoginServiceRequest request =
@@ -28,10 +35,10 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> fetchListStaff({bool shouldRefresh = false}) async {
     if (_isLoading) return;
     if (shouldRefresh) {
-      listStaff.clear();
-      staffPagination = Pagination(size: 20);
+      _listStaff.clear();
+      _staffPagination = Pagination(size: 20);
     }
-    if (!staffPagination.hasNext) return;
+    if (!_staffPagination.hasNext) return;
     _isLoading = true;
     notifyListeners();
 
@@ -42,7 +49,7 @@ class HomeViewModel extends ChangeNotifier {
     await Future.delayed(Duration(seconds: 5));
     await service.callService(request).then((value) {
       listStaff.addAll(value.detail?.listStaff ?? []);
-      staffPagination.setNext = 5;
+      _staffPagination.setNext = 5;
       _isLoading = false;
       notifyListeners();
     }).catchError((onError) {
