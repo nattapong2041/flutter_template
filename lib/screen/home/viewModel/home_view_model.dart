@@ -39,7 +39,7 @@ class HomeViewModel extends BaseViewModel {
       _staffPagination.setNext = 5;
       completedState();
     }).catchError((onError) {
-      log(onError);
+      log(onError.toString());
       errorState(message: onError.toString());
     });
   }

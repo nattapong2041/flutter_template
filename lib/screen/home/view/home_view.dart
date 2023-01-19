@@ -74,6 +74,15 @@ class _ListStaff extends StatelessWidget with BaseScreen {
     final viewModel = context.watch<HomeViewModel>();
     final scrollController = ScrollController();
     final colors = Theme.of(context).extension<AppColors>()!;
+    if (viewModel.apiState == ApiState.error) {
+      Future.microtask(
+        () => defaultAlertDialog(
+            context: context, title: "Error", message: viewModel.message),
+      );
+      return Center(
+        child: Text(viewModel.message),
+      );
+    }
     return NotificationListener<ScrollUpdateNotification>(
       onNotification: (notification) {
         if (scrollController.position.pixels >
@@ -83,37 +92,32 @@ class _ListStaff extends StatelessWidget with BaseScreen {
         return true;
       },
       child: RefreshIndicator(
-        color: colors.primaryColor,
-        onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
-        child: viewModel.apiState == ApiState.completed
-            ? SizedBox(
-                height: MediaQuery.of(context).size.height -
-                    kToolbarHeight -
-                    kBottomNavigationBarHeight,
-                child: viewModel.listStaff.isEmpty
-                    ? const _ListEmpty()
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: ListView.builder(
-                              controller: scrollController,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount: viewModel.listStaff.length,
-                              itemBuilder: ((context, index) => Text(
-                                  viewModel.listStaff[index].firstName ?? "")),
-                            ),
-                          ),
-                          if ((viewModel.apiState == ApiState.loading) &&
-                              viewModel.listStaff.isNotEmpty)
-                            defaultLoading(),
-                        ],
+          color: colors.primaryColor,
+          onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height -
+                kToolbarHeight -
+                kBottomNavigationBarHeight,
+            child: viewModel.listStaff.isEmpty
+                ? const _ListEmpty()
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          controller: scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: viewModel.listStaff.length,
+                          itemBuilder: ((context, index) =>
+                              Text(viewModel.listStaff[index].firstName ?? "")),
+                        ),
                       ),
-              )
-            : Center(
-                child: Text(viewModel.message),
-              ),
-      ),
+                      if ((viewModel.apiState == ApiState.loading) &&
+                          viewModel.listStaff.isNotEmpty)
+                        defaultLoading(),
+                    ],
+                  ),
+          )),
     );
   }
 }
