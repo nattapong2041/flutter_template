@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_template/service/login/list_staff_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../extension/colors.dart';
@@ -43,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     AppColors colors = Theme.of(context).extension<AppColors>()!;
     return ChangeNotifierProvider(
-      create: (context) => HomeViewModel(),
+      create: (context) => HomeViewModel(ListStaffService()),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: PageView(

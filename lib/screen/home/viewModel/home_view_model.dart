@@ -7,10 +7,11 @@ import '../../../base/pagination.dart';
 import '../../../service/login/list_staff_service.dart';
 
 class HomeViewModel extends BaseViewModel {
+  late ListStaffService service;
   Pagination _staffPagination = Pagination(size: 20);
   List<Staff> _listStaff = [];
 
-  HomeViewModel() {
+  HomeViewModel(this.service) {
     fetchListStaff(shouldRefresh: true);
   }
 
@@ -33,7 +34,6 @@ class HomeViewModel extends BaseViewModel {
     ListStaffServiceRequest request = ListStaffServiceRequest(
         userId: '5049886d-1555-42ce-857c-97c3b543a209', searchKey: '');
 
-    ListStaffService service = ListStaffService();
     await service.callService(request).then((value) {
       listStaff.addAll(value.detail?.listStaff ?? []);
       _staffPagination.setNext = 5;

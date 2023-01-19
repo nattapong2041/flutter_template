@@ -25,15 +25,6 @@ class _HomeViewState extends State<HomeView>
   @override
   void initState() {
     super.initState();
-    // Future.microtask(() async {
-    //   await context
-    //       .read<HomeViewModel>()
-    //       .fetchListStaff(shouldRefresh: true)
-    //       .catchError((onError) async {
-    //     await defaultAlertDialog(
-    //         context: context, title: "title", message: onError.toString());
-    //   });
-    // });
   }
 
   @override

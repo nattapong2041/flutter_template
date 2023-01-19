@@ -1,44 +1,89 @@
 // Generate a MockClient using the Mockito package.
 // Create new instances of this class in each test.
-import 'dart:convert';
-
-import 'package:flutter_template/base/api_exception.dart';
-import 'package:flutter_template/base/base_service.dart';
-import 'package:flutter_template/common/config.dart';
 import 'package:flutter_template/screen/home/viewModel/home_view_model.dart';
 import 'package:flutter_template/service/login/list_staff_service.dart';
-import 'package:flutter_template/service/login/login_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-//@GenerateNiceMocks([MockSpec<ListStaffService>()])
+import 'home_view_model_test.mocks.dart';
+
+@GenerateNiceMocks([MockSpec<ListStaffService>()])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
   group('Home view model', () {
+    late HomeViewModel viewModel;
+    MockListStaffService service = MockListStaffService();
+    ListStaffServiceRequest request = ListStaffServiceRequest(
+        userId: '5049886d-1555-42ce-857c-97c3b543a209', searchKey: '');
+    final response1 = ListStaffServiceResponse(ListStaffResult([]));
+    final response2 = ListStaffServiceResponse(
+      ListStaffResult(
+        [
+          Staff(1, "staffNo1", "Male", "firstName1", "lastName1", 1),
+          Staff(2, "staffNo2", "Male", "firstName2", "lastName1", 0)
+        ],
+      ),
+    );
+
     test('HomeViewModel contruct being call', () async {
-      final viewModel = FakeHomeViewModel();
-      expect(viewModel.listStaff.length, 1);
+      when(service.callService(any))
+          .thenAnswer((realInvocation) async => response1);
+
+      viewModel = HomeViewModel(service);
+      verify(await service.callService(any));
+      expect(viewModel.listStaff, response1.detail?.listStaff ?? []);
+    });
+
+    test('can get listStaff value', () async {
+      when(service.callService(any))
+          .thenAnswer((realInvocation) async => response2);
+
+      viewModel = HomeViewModel(service);
+
+      //wait for fetch data in contruct is done
+      await Future.delayed(const Duration(seconds: 1));
+      expect(viewModel.listStaff, response2.detail?.listStaff ?? []);
+    });
+
+    test('can set listStaff value', () async {
+      when(service.callService(any))
+          .thenAnswer((realInvocation) async => response2);
+
+      viewModel = HomeViewModel(service);
+
+      viewModel.listStaff = response1.detail?.listStaff ?? [];
+      expect(viewModel.listStaff, response1.detail?.listStaff ?? [],
+          reason: "set with response1");
+
+      viewModel.listStaff = response2.detail?.listStaff ?? [];
+      expect(viewModel.listStaff, response2.detail?.listStaff ?? [],
+          reason: "set with response2");
+    });
+
+    test('can fetch listStaff', () async {
+      when(service.callService(any))
+          .thenAnswer((realInvocation) async => response2);
+
+      viewModel = HomeViewModel(service);
+      //wait for fetch data in contruct is done
+      await Future.delayed(const Duration(seconds: 1));
+      //is pagination working
+      await viewModel.fetchListStaff();
+      expect(
+          viewModel.listStaff.length >
+              (response2.detail?.listStaff?.length ?? 0),
+          true,
+          reason: "call with pagination value should >");
+
+      await viewModel.fetchListStaff(shouldRefresh: true);
+      expect(
+          viewModel.listStaff.length ==
+              (response2.detail?.listStaff?.length ?? 0),
+          true,
+          reason: "reset with response2 value should equal");
     });
   });
-}
-
-class FakeHomeViewModel extends Fake implements HomeViewModel {
-  List<Staff> _listStaff = [];
-
-  @override
-  List<Staff> get listStaff => _listStaff;
-
-  @override
-  FakeHomeViewModel() {
-    fetchListStaff(shouldRefresh: true);
-  }
-
-  @override
-  Future<void> fetchListStaff({bool shouldRefresh = false}) async {
-    _listStaff = [Staff(1, "staffNo", "gender", "firstName", "lastName", 1)];
-  }
 }
