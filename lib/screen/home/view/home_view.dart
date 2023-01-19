@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_template/base/base_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../../base/base_screen.dart';
 import '../../../common/widget/default_appbar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../common/widget/loading_container.dart';
 import '../../../extension/colors.dart';
 import '../viewModel/home_view_model.dart';
 
@@ -23,12 +25,15 @@ class _HomeViewState extends State<HomeView>
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-      () {
-        defaultAlertDialog(
-            context: context, title: "title", message: "message");
-      },
-    );
+    // Future.microtask(() async {
+    //   await context
+    //       .read<HomeViewModel>()
+    //       .fetchListStaff(shouldRefresh: true)
+    //       .catchError((onError) async {
+    //     await defaultAlertDialog(
+    //         context: context, title: "title", message: onError.toString());
+    //   });
+    // });
   }
 
   @override
@@ -38,20 +43,20 @@ class _HomeViewState extends State<HomeView>
       appBar: const DefaultAppbar(),
       body: Selector<HomeViewModel, bool>(
           selector: (context, viewModel) =>
-              viewModel.isLoading && viewModel.listStaff.isEmpty,
+              (viewModel.apiState == ApiState.loading) &&
+              viewModel.listStaff.isEmpty,
           builder: (context, shouldShowIndicator, widget) {
-            if (shouldShowIndicator) {
-              return Center(child: defaultLoading());
-            } else {
-              return const _ListStaff();
-            }
+            return LoadingContainer(
+              isLoading: shouldShowIndicator,
+              child: const _ListStaff(),
+            );
           }),
     );
   }
 }
 
 class _ListEmpty extends StatelessWidget {
-  const _ListEmpty({super.key});
+  const _ListEmpty();
 
   @override
   Widget build(BuildContext context) {
@@ -80,29 +85,34 @@ class _ListStaff extends StatelessWidget with BaseScreen {
       child: RefreshIndicator(
         color: colors.primaryColor,
         onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height -
-              kToolbarHeight -
-              kBottomNavigationBarHeight,
-          child: viewModel.listStaff.isEmpty
-              ? const _ListEmpty()
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        controller: scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: viewModel.listStaff.length,
-                        itemBuilder: ((context, index) =>
-                            Text(viewModel.listStaff[index].firstName ?? "")),
+        child: viewModel.apiState == ApiState.completed
+            ? SizedBox(
+                height: MediaQuery.of(context).size.height -
+                    kToolbarHeight -
+                    kBottomNavigationBarHeight,
+                child: viewModel.listStaff.isEmpty
+                    ? const _ListEmpty()
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                              controller: scrollController,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              itemCount: viewModel.listStaff.length,
+                              itemBuilder: ((context, index) => Text(
+                                  viewModel.listStaff[index].firstName ?? "")),
+                            ),
+                          ),
+                          if ((viewModel.apiState == ApiState.loading) &&
+                              viewModel.listStaff.isNotEmpty)
+                            defaultLoading(),
+                        ],
                       ),
-                    ),
-                    if (viewModel.isLoading && viewModel.listStaff.isNotEmpty)
-                      defaultLoading(),
-                  ],
-                ),
-        ),
+              )
+            : Center(
+                child: Text(viewModel.message),
+              ),
       ),
     );
   }

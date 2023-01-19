@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../base/api_exception.dart';
 import '../../base/base_model.dart';
 import '../../base/base_service.dart';
 
@@ -15,6 +16,13 @@ class LoginService extends BaseService {
             request: request.toJson(), method: HttpMethod.post, needAuth: false)
         .then((resp) {
       return LoginServiceResponse.fromJson(jsonDecode(resp));
+    }).catchError((onError) {
+      if (onError is ApiException) {
+        throw onError;
+      } else {
+        log(onError);
+        throw Exception("Error ${request.service}");
+      }
     });
   }
 }

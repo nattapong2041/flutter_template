@@ -1,16 +1,22 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/config.dart';
+import 'api_exception.dart';
 
 enum HttpMethod { post, get }
 
 enum UrlType { deufaultUrl, urlWithUnencodePath, absoluteUrl }
 
 enum ServiceUrl { login, listStaff }
+
+enum ApiState { loading, completed, error }
 
 extension AppUrl on ServiceUrl {
   String get fullUrl {
@@ -50,6 +56,7 @@ class BaseService {
     'API-KEY': Config.apiKey,
   };
 
+  @protected
   Future<String> execute(ServiceUrl url,
       {required Map<String, dynamic> request,
       required HttpMethod method,
@@ -70,13 +77,29 @@ class BaseService {
       log("********** result **********");
       log('response code: ${response.statusCode}');
       log('response body: ${response.body}');
-      if (response.statusCode == 200) {
-        return response.body;
-      } else {
-        throw Exception(response.reasonPhrase);
+      switch (response.statusCode) {
+        case 200:
+          return response.body;
+        case 400:
+          throw BadRequestException(response.body.toString());
+        case 401:
+        case 403:
+          throw UnauthorisedException(response.body.toString());
+        case 500:
+        default:
+          throw FetchDataException(
+              '${response.statusCode} ${response.reasonPhrase}');
       }
-    } catch (e) {
+    } on ApiException catch (_) {
       rethrow;
+    } on SocketException catch (e) {
+      //throw FetchDataException('No Internet connection');
+      throw FetchDataException(e.message);
+    } on TimeoutException catch (e) {
+      throw FetchDataException(e.message ?? 'Contection timeout');
+    } catch (e) {
+      log(e.toString());
+      throw UnknowException(e.toString());
     }
   }
 

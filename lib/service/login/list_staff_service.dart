@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../base/api_exception.dart';
 import '../../base/base_model.dart';
 import '../../base/base_service.dart';
 
@@ -13,13 +14,20 @@ class ListStaffService extends BaseService {
       ListStaffServiceRequest request) {
     log('execute service: ${request.service}');
     return execute(ServiceUrl.listStaff,
-            unencodePath: '/${request.userId}',
+            unencodePath: 'aaa/${request.userId}',
             urlType: UrlType.urlWithUnencodePath,
             request: request.toJson(),
             method: HttpMethod.get,
             needAuth: true)
         .then((resp) {
       return ListStaffServiceResponse.fromJson(jsonDecode(resp));
+    }).catchError((onError) {
+      if (onError is ApiException) {
+        throw onError;
+      } else {
+        log(onError);
+        throw Exception("Error ${request.service}");
+      }
     });
   }
 }

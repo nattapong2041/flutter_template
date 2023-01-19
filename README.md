@@ -8,6 +8,8 @@ A Template for flutter project.
 [Localizationn](#localizations) 
 
 [Model generate](#modelgen) 
+
+[Test guild line](#testguide) 
 <a name="contact"></a>
 ## Confuse somthing in project 
 contact me: nattapong@dosetech.co
@@ -64,4 +66,26 @@ flutter pub run build_runner build
 or this if conflict occured when builde.
 ```
 flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+<a name="testguide"></a>
+## Test Guideline 
+ref:https://pub.dev/packages/json_serializable
+### Unit test
+### Widget test
+### Integration test
+### Test converage
+
+1.Installing Lcov in Mac
+```
+brew install lcov
+```
+2.Run tests, generate coverage files 
+```
+flutter test --coverage
+genhtml coverage/lcov.info -o coverage/html
+```
+3.Open coverage report in browser
+```
+open coverage/html/index.html
 ```

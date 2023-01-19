@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
+import 'dart:developer';
+
+import 'package:flutter_template/base/base_service.dart';
+import 'package:flutter_template/base/base_view_model.dart';
 
 import '../../../base/pagination.dart';
 import '../../../service/login/list_staff_service.dart';
-import '../../../service/login/login_service.dart';
 
-class HomeViewModel extends ChangeNotifier {
-  bool _isLoading = false;
+class HomeViewModel extends BaseViewModel {
   Pagination _staffPagination = Pagination(size: 20);
   List<Staff> _listStaff = [];
 
@@ -13,7 +14,6 @@ class HomeViewModel extends ChangeNotifier {
     fetchListStaff(shouldRefresh: true);
   }
 
-  bool get isLoading => _isLoading;
   List<Staff> get listStaff => _listStaff;
 
   set listStaff(List<Staff> list) {
@@ -21,42 +21,26 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login() async {
-    LoginServiceRequest request =
-        LoginServiceRequest(username: "admin@tnl.com", password: "tnl1234!");
-
-    LoginService service = LoginService();
-    await service.callService(request).then((value) {
-      print(value.detail);
-    }).catchError((onError) {
-      print(onError);
-    });
-  }
-
   Future<void> fetchListStaff({bool shouldRefresh = false}) async {
-    if (_isLoading) return;
+    if (apiState == ApiState.loading) return;
     if (shouldRefresh) {
       _listStaff.clear();
       _staffPagination = Pagination(size: 20);
     }
     if (!_staffPagination.hasNext) return;
-    _isLoading = true;
-    notifyListeners();
+    loadingState();
 
     ListStaffServiceRequest request = ListStaffServiceRequest(
-        userId: '5049886d-1555-42ce-857c-97c3b543a209', searchKey: 'god');
+        userId: '5049886d-1555-42ce-857c-97c3b543a209', searchKey: '');
 
     ListStaffService service = ListStaffService();
-    await Future.delayed(Duration(seconds: 5));
     await service.callService(request).then((value) {
       listStaff.addAll(value.detail?.listStaff ?? []);
       _staffPagination.setNext = 5;
-      _isLoading = false;
-      notifyListeners();
+      completedState();
     }).catchError((onError) {
-      print(onError);
-      _isLoading = false;
-      notifyListeners();
+      log(onError);
+      errorState(message: onError.toString());
     });
   }
 }
