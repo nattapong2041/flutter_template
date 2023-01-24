@@ -16,7 +16,7 @@ class DefaultAppbar extends StatelessWidget with PreferredSizeWidget {
     AppColors colors = Theme.of(context).extension<AppColors>()!;
     //final viewModel = context.read<LocaleViewModel>();
     return AppBar(
-      title: Text(title ?? AppLocalizations.of(context)!.appTitle),
+      title: Text(title ?? AppLocalizations.of(context)!.app_title),
       backgroundColor: colors.primaryColor,
       actions: [
         //! temporary disable language change button

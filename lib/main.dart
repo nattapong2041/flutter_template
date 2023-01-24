@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_template/common/app_route_name.dart';
 import 'package:provider/provider.dart';
 
-import 'extension/colors.dart';
-import 'extension/text_style.dart';
+import 'extension/app_theme.dart';
 import 'localization/locale_view_model.dart';
 import 'screen/main/main_screen.dart';
 
@@ -19,12 +19,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => LocaleViewModel(),
+      create: (context) => LocaleViewModel(const Locale('th')),
       child:
           Consumer<LocaleViewModel>(builder: (context, localeViewModel, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'Flutter Template',
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -36,30 +36,13 @@ class MyApp extends StatelessWidget {
             Locale('th', ''), // Thai, no country code
           ],
           locale: localeViewModel.locale,
-          theme: ThemeData(
-            extensions: <ThemeExtension<dynamic>>[
-              AppColors(
-                primaryColor: HexColor.fromHex("#000000"),
-                danger: HexColor.fromHex("#000000"),
-              ),
-              const AppTextTheme(
-                kanitNormalText: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Kanit',
-                ),
-                kanitBoldText: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Kanit',
-                ),
-              ),
-            ],
-          ),
+          theme: AppTheme.mainTheme,
+          //* dark theme if need
+          //darkTheme: AppTheme.mainTheme,
           routes: {
-            '/': (context) => const MainScreen(),
+            AppRouteName.home: (context) => const MainScreen(),
           },
-          initialRoute: '/',
+          initialRoute: AppRouteName.home,
         );
       }),
     );

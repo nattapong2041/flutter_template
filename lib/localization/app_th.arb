@@ -1,6 +1,6 @@
 {
-    "appTitle": "Flutter Template",
+    "app_title": "Flutter เทมเพลต",
     
-    "alertOk": "ตกลง",
-    "alertCancle": "ยกเลิก"
+    "alert_ok": "ตกลง",
+    "alert_cancle": "ยกเลิก"
 }

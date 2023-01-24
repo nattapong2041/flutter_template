@@ -4,6 +4,9 @@ class ApiException implements Exception {
 
   ApiException(this._message, this._prefix);
 
+  String get prefix => _prefix;
+  String get message => _message;
+
   @override
   String toString() {
     return "$_prefix$_message";

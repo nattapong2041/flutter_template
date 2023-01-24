@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class LocaleViewModel extends ChangeNotifier {
   Locale? _locale;
 
+  LocaleViewModel(this._locale);
+
   Locale? get locale => _locale;
 
   void set(Locale locale) {

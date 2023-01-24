@@ -1,9 +1,11 @@
-{
-    "appTitle": "Flutter Template",
+{   
+  "@_COMMON": {},
+  "app_title": "Flutter Template",
     
-    "alertOk": "Ok",
-    "@alertOk": {
-      "description": "For use with alert"
-    },
-    "alertCancle": "Cancle"
+  "@_COMMON_ALERT": {},
+  "alert_ok": "Ok",
+  "@alert_ok": {
+    "description": "For use with alert"
+  },
+  "alert_cancle": "Cancle"
 }

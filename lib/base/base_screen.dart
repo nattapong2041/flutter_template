@@ -36,7 +36,7 @@ abstract class BaseScreen {
             TextButton(
               onPressed: onPressedCancle,
               child: Text(
-                AppLocalizations.of(context)!.alertCancle,
+                AppLocalizations.of(context)!.alert_cancle,
                 style: textStyle.kanitNormalText
                     ?.copyWith(color: colors.primaryColor),
               ),
@@ -44,7 +44,7 @@ abstract class BaseScreen {
           TextButton(
             onPressed: onPressedOk ?? () => Navigator.pop(context, 'OK'),
             child: Text(
-              AppLocalizations.of(context)!.alertOk,
+              AppLocalizations.of(context)!.alert_ok,
               style: textStyle.kanitNormalText
                   ?.copyWith(color: colors.primaryColor),
             ),

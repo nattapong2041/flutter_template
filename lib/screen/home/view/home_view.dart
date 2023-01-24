@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_template/base/base_service.dart';
 import 'package:provider/provider.dart';
@@ -66,16 +68,17 @@ class _ListStaff extends StatelessWidget with BaseScreen {
     final scrollController = ScrollController();
     final colors = Theme.of(context).extension<AppColors>()!;
     if (viewModel.apiState == ApiState.error) {
-      Future.microtask(
-        () => defaultAlertDialog(
-            context: context, title: "Error", message: viewModel.message),
-      );
+      // Future.microtask(
+      //   () => defaultAlertDialog(
+      //       context: context, title: "Error", message: viewModel.message),
+      // );
       return Center(
         child: Text(viewModel.message),
       );
     }
     return NotificationListener<ScrollUpdateNotification>(
       onNotification: (notification) {
+        log(scrollController.position.pixels.toString());
         if (scrollController.position.pixels >
             (0.9 * scrollController.position.maxScrollExtent)) {
           viewModel.fetchListStaff();
@@ -99,8 +102,10 @@ class _ListStaff extends StatelessWidget with BaseScreen {
                           controller: scrollController,
                           physics: const AlwaysScrollableScrollPhysics(),
                           itemCount: viewModel.listStaff.length,
-                          itemBuilder: ((context, index) =>
-                              Text(viewModel.listStaff[index].firstName ?? "")),
+                          itemBuilder: ((context, index) => SizedBox(
+                              height: 40.0,
+                              child: Text(
+                                  viewModel.listStaff[index].firstName ?? ""))),
                         ),
                       ),
                       if ((viewModel.apiState == ApiState.loading) &&

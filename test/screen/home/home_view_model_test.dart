@@ -1,23 +1,19 @@
-// Generate a MockClient using the Mockito package.
-// Create new instances of this class in each test.
-import 'package:flutter_template/screen/home/viewModel/home_view_model.dart';
-import 'package:flutter_template/service/login/list_staff_service.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:flutter_template/base/api_exception.dart';
+import 'package:flutter_template/base/base_service.dart';
+import 'package:flutter_template/screen/home/viewModel/home_view_model.dart';
+import 'package:flutter_template/service/login/list_staff_service.dart';
 
 import 'home_view_model_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<ListStaffService>()])
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences.setMockInitialValues({});
   group('Home view model', () {
     late HomeViewModel viewModel;
     MockListStaffService service = MockListStaffService();
-    ListStaffServiceRequest request = ListStaffServiceRequest(
-        userId: '5049886d-1555-42ce-857c-97c3b543a209', searchKey: '');
     final response1 = ListStaffServiceResponse(ListStaffResult([]));
     final response2 = ListStaffServiceResponse(
       ListStaffResult(
@@ -84,6 +80,18 @@ void main() {
               (response2.detail?.listStaff?.length ?? 0),
           true,
           reason: "reset with response2 value should equal");
+    });
+
+    test('can fetch listStaff handling error', () async {
+      when(service.callService(any)).thenAnswer(
+          (realInvocation) async => throw FetchDataException("Error"));
+
+      viewModel = HomeViewModel(service);
+      //wait for fetch data in contruct is done
+      await Future.delayed(const Duration(seconds: 1));
+
+      expect(viewModel.apiState, ApiState.error,
+          reason: "ApiState of this view model should be error state");
     });
   });
 }
