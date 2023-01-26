@@ -1,8 +1,7 @@
 import 'dart:developer';
 
-import 'package:flutter_template/base/base_service.dart';
-import 'package:flutter_template/base/base_view_model.dart';
-
+import '../../../base/base_service.dart';
+import '../../../base/base_view_model.dart';
 import '../../../base/pagination.dart';
 import '../../../service/login/list_staff_service.dart';
 

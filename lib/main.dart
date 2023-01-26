@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_template/common/app_route_name.dart';
 import 'package:provider/provider.dart';
 
+import 'common/app_route_name.dart';
 import 'extension/app_theme.dart';
 import 'localization/locale_view_model.dart';
 import 'screen/main/main_screen.dart';
