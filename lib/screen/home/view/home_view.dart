@@ -25,11 +25,6 @@ class _HomeViewState extends State<HomeView>
   bool get wantKeepAlive => true;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
@@ -41,9 +36,97 @@ class _HomeViewState extends State<HomeView>
           builder: (context, shouldShowIndicator, widget) {
             return LoadingContainer(
               isLoading: shouldShowIndicator,
-              child: const _ListStaff(),
+              child: const _Display(),
             );
           }),
+    );
+  }
+}
+
+class _Display extends StatelessWidget with BaseScreen {
+  const _Display();
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.watch<HomeViewModel>();
+    if (viewModel.apiState == ApiState.error) {
+      // Future.microtask(
+      //   () => defaultAlertDialog(
+      //       context: context, title: "Error", message: viewModel.message),
+      // );
+      return const _ErrorDisplay();
+    }
+    return viewModel.listStaff.isEmpty
+        ? const _ListEmpty()
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Expanded(
+                child: _ListStaff(),
+              ),
+              if ((viewModel.apiState == ApiState.loading) &&
+                  viewModel.listStaff.isNotEmpty)
+                defaultLoading(),
+            ],
+          );
+  }
+}
+
+class _ErrorDisplay extends StatelessWidget {
+  const _ErrorDisplay();
+
+  @override
+  Widget build(BuildContext context) {
+    final HomeViewModel viewModel = context.read<HomeViewModel>();
+    final colors = Theme.of(context).extension<AppColors>()!;
+    return RefreshIndicator(
+      color: colors.primaryColor,
+      onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height -
+              kToolbarHeight -
+              kBottomNavigationBarHeight -
+              kTextTabBarHeight,
+          child: Center(
+            child: Text(viewModel.message),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ListStaff extends StatelessWidget {
+  const _ListStaff();
+
+  @override
+  Widget build(BuildContext context) {
+    final ScrollController scrollController = ScrollController();
+    final HomeViewModel viewModel = context.watch<HomeViewModel>();
+    final colors = Theme.of(context).extension<AppColors>()!;
+
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: (notification) {
+        if (scrollController.position.pixels >
+            (0.9 * scrollController.position.maxScrollExtent)) {
+          viewModel.fetchListStaff();
+        }
+        return true;
+      },
+      child: RefreshIndicator(
+        color: colors.primaryColor,
+        onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
+        child: ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: scrollController,
+          itemCount: viewModel.listStaff.length,
+          itemBuilder: ((context, index) => SizedBox(
+              height: 40.0,
+              child: Text(viewModel.listStaff[index].firstName ?? ""))),
+        ),
+      ),
     );
   }
 }
@@ -53,67 +136,23 @@ class _ListEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('JUST EMPTY LIST'),
-    );
-  }
-}
-
-class _ListStaff extends StatelessWidget with BaseScreen {
-  const _ListStaff();
-
-  @override
-  Widget build(BuildContext context) {
-    final viewModel = context.watch<HomeViewModel>();
-    final scrollController = ScrollController();
+    final HomeViewModel viewModel = context.read<HomeViewModel>();
     final colors = Theme.of(context).extension<AppColors>()!;
-    if (viewModel.apiState == ApiState.error) {
-      // Future.microtask(
-      //   () => defaultAlertDialog(
-      //       context: context, title: "Error", message: viewModel.message),
-      // );
-      return Center(
-        child: Text(viewModel.message),
-      );
-    }
-    return NotificationListener<ScrollUpdateNotification>(
-      onNotification: (notification) {
-        log(scrollController.position.pixels.toString());
-        if (scrollController.position.pixels >
-            (0.9 * scrollController.position.maxScrollExtent)) {
-          viewModel.fetchListStaff();
-        }
-        return true;
-      },
-      child: RefreshIndicator(
-          color: colors.primaryColor,
-          onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height -
-                kToolbarHeight -
-                kBottomNavigationBarHeight,
-            child: viewModel.listStaff.isEmpty
-                ? const _ListEmpty()
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          controller: scrollController,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: viewModel.listStaff.length,
-                          itemBuilder: ((context, index) => SizedBox(
-                              height: 40.0,
-                              child: Text(
-                                  viewModel.listStaff[index].firstName ?? ""))),
-                        ),
-                      ),
-                      if ((viewModel.apiState == ApiState.loading) &&
-                          viewModel.listStaff.isNotEmpty)
-                        defaultLoading(),
-                    ],
-                  ),
-          )),
+    return RefreshIndicator(
+      color: colors.primaryColor,
+      onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height -
+              kToolbarHeight -
+              kBottomNavigationBarHeight -
+              kTextTabBarHeight,
+          child: const Center(
+            child: Text('JUST EMPTY LIST'),
+          ),
+        ),
+      ),
     );
   }
 }

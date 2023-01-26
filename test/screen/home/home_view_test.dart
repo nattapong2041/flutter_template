@@ -31,14 +31,13 @@ Widget makeTesteableWidget({required Widget child}) => MaterialApp(
     );
 
 void main() {
-  final response1 = ListStaffServiceResponse(ListStaffResult([]));
-  final response2 = ListStaffServiceResponse(
+  final service = MockListStaffService();
+  late HomeViewModel viewModel;
+  final responseEmpty = ListStaffServiceResponse(ListStaffResult([]));
+  final responseNormal = ListStaffServiceResponse(
     ListStaffResult(
       [
         Staff(1, "staffNo1", "Male", "firstName1", "lastName1", 1),
-        Staff(2, "staffNo2", "Male", "firstName2", "lastName1", 0),
-        Staff(2, "staffNo2", "Male", "firstName2", "lastName1", 0),
-        Staff(2, "staffNo2", "Male", "firstName2", "lastName1", 0),
         Staff(2, "staffNo2", "Male", "firstName2", "lastName1", 0),
         Staff(2, "staffNo2", "Male", "firstName2", "lastName1", 0),
         Staff(2, "staffNo2", "Male", "firstName2", "lastName1", 0),
@@ -58,18 +57,18 @@ void main() {
   );
   final responseError = FetchDataException("error");
 
+  setUp(() {
+    when(service.callService(any))
+        .thenAnswer((realInvocation) async => responseNormal);
+    viewModel = HomeViewModel(service);
+  });
   group('on fetch data with', () {
     testWidgets('HomeView show up and display list view if have data',
         (tester) async {
-      //*arrange
-      final service = MockListStaffService();
-      when(service.callService(any))
-          .thenAnswer((realInvocation) async => response2);
-
       await tester.pumpWidget(
         makeTesteableWidget(
             child: ChangeNotifierProvider<HomeViewModel>(
-          create: (context) => HomeViewModel(service),
+          create: (context) => viewModel,
           child: const HomeView(),
         )),
       );
@@ -88,10 +87,6 @@ void main() {
 
     testWidgets('can scroll then use pagination', (tester) async {
       //*arrange
-      final service = MockListStaffService();
-      when(service.callService(any))
-          .thenAnswer((realInvocation) async => response2);
-      final viewModel = HomeViewModel(service);
       await tester.pumpWidget(
         makeTesteableWidget(
             child: ChangeNotifierProvider<HomeViewModel>(
@@ -116,20 +111,20 @@ void main() {
       await tester.pumpAndSettle();
       //*assert
       expect(viewModel.listStaff.length,
-          (response2.detail?.listStaff?.length ?? 0) * 2,
+          (responseNormal.detail?.listStaff?.length ?? 0) * 2,
           reason: "length should double after pagi");
     });
 
     testWidgets('display empty list if have no data', (tester) async {
-      final service = MockListStaffService();
       when(service.callService(any))
-          .thenAnswer((realInvocation) async => response1);
+          .thenAnswer((realInvocation) async => responseEmpty);
 
+      viewModel = HomeViewModel(service);
       //pump widget
       await tester.pumpWidget(
         makeTesteableWidget(
             child: ChangeNotifierProvider<HomeViewModel>(
-          create: (context) => HomeViewModel(service),
+          create: (context) => viewModel,
           child: const HomeView(),
         )),
       );
@@ -146,11 +141,10 @@ void main() {
   group('on error', () {
     testWidgets('can show error message', (tester) async {
       //*arrange
-      final service = MockListStaffService();
       when(service.callService(any))
           .thenAnswer((realInvocation) async => throw responseError);
 
-      final viewModel = HomeViewModel(service);
+      viewModel = HomeViewModel(service);
       await tester.pumpWidget(
         makeTesteableWidget(
             child: ChangeNotifierProvider<HomeViewModel>(
@@ -171,12 +165,68 @@ void main() {
   });
 
   group('on refresh', () {
-    testWidgets('can refresh on empty list', (tester) async {});
+    testWidgets('can refresh on empty list', (tester) async {
+      //*arrange
+      when(service.callService(any))
+          .thenAnswer((realInvocation) async => responseEmpty);
+      viewModel = HomeViewModel(service);
 
-    testWidgets('can refresh on list less than screen', (tester) async {});
+      await tester.pumpWidget(
+        makeTesteableWidget(
+            child: ChangeNotifierProvider<HomeViewModel>(
+          create: (context) => viewModel,
+          child: const HomeView(),
+        )),
+      );
 
-    testWidgets('can refresh on list more than screen', (tester) async {});
+      await tester.pumpAndSettle();
+      Finder emptyFinder = find.textContaining("EMPTY LIST");
+      expect(emptyFinder, findsOneWidget,
+          reason: "should find empty list text");
 
-    testWidgets('can refresh on error message', (tester) async {});
+      when(service.callService(any))
+          .thenAnswer((realInvocation) async => responseNormal);
+      final Finder scrollFinder = find.byType(Scrollable);
+      await tester.drag(scrollFinder, const Offset(0, 100));
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+
+      final Finder listviewFinder = find.byType(ListView);
+      emptyFinder = find.textContaining("EMPTY LIST");
+
+      expect(emptyFinder, findsNothing,
+          reason: "should not find empty list text");
+      expect(listviewFinder, findsOneWidget, reason: "should find list view");
+    });
+
+    testWidgets('can refresh on error message', (tester) async {
+      //*arrange
+      when(service.callService(any))
+          .thenAnswer((realInvocation) async => throw responseError);
+      viewModel = HomeViewModel(service);
+
+      await tester.pumpWidget(
+        makeTesteableWidget(
+            child: ChangeNotifierProvider<HomeViewModel>(
+          create: (context) => viewModel,
+          child: const HomeView(),
+        )),
+      );
+
+      await tester.pumpAndSettle();
+      Finder emptyFinder = find.textContaining("error");
+      expect(emptyFinder, findsOneWidget, reason: "should find error text");
+
+      when(service.callService(any))
+          .thenAnswer((realInvocation) async => responseNormal);
+      final Finder scrollFinder = find.byType(Scrollable);
+      await tester.drag(scrollFinder, const Offset(0, 100));
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+
+      final Finder listviewFinder = find.byType(ListView);
+      emptyFinder = find.textContaining("error");
+
+      expect(emptyFinder, findsNothing, reason: "should not find error text");
+      expect(listviewFinder, findsOneWidget, reason: "should find list view");
+    });
   });
 }

@@ -32,7 +32,7 @@ class HomeViewModel extends BaseViewModel {
     loadingState();
 
     ListStaffServiceRequest request = ListStaffServiceRequest(
-        userId: '5049886d-1555-42ce-857c-97c3b543a209', searchKey: '');
+        userId: '5049886d-1555-42ce-857c-97c3b543a209', searchKey: "god");
 
     await _service.callService(request).then((value) {
       listStaff.addAll(value.detail?.listStaff ?? []);

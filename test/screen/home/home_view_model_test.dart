@@ -11,19 +11,28 @@ import 'home_view_model_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<ListStaffService>()])
 void main() {
-  group('Home view model', () {
-    late HomeViewModel viewModel;
-    MockListStaffService service = MockListStaffService();
-    final response1 = ListStaffServiceResponse(ListStaffResult([]));
-    final response2 = ListStaffServiceResponse(
-      ListStaffResult(
-        [
-          Staff(1, "staffNo1", "Male", "firstName1", "lastName1", 1),
-          Staff(2, "staffNo2", "Male", "firstName2", "lastName1", 0)
-        ],
-      ),
-    );
+  late HomeViewModel viewModel;
+  MockListStaffService service = MockListStaffService();
+  final response1 = ListStaffServiceResponse(ListStaffResult([]));
+  final response2 = ListStaffServiceResponse(
+    ListStaffResult(
+      [
+        Staff(1, "staffNo1", "Male", "firstName1", "lastName1", 1),
+        Staff(2, "staffNo2", "Male", "firstName2", "lastName1", 0)
+      ],
+    ),
+  );
+  setUp(
+    () {
+      when(service.callService(any))
+          .thenAnswer((realInvocation) async => response2);
 
+      viewModel = HomeViewModel(service);
+    },
+  );
+
+  tearDown(() => null);
+  group('Home view model', () {
     test('HomeViewModel contruct being call', () async {
       when(service.callService(any))
           .thenAnswer((realInvocation) async => response1);
@@ -40,16 +49,11 @@ void main() {
       viewModel = HomeViewModel(service);
 
       //wait for fetch data in contruct is done
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(microseconds: 100));
       expect(viewModel.listStaff, response2.detail?.listStaff ?? []);
     });
 
     test('can set listStaff value', () async {
-      when(service.callService(any))
-          .thenAnswer((realInvocation) async => response2);
-
-      viewModel = HomeViewModel(service);
-
       viewModel.listStaff = response1.detail?.listStaff ?? [];
       expect(viewModel.listStaff, response1.detail?.listStaff ?? [],
           reason: "set with response1");
@@ -60,10 +64,6 @@ void main() {
     });
 
     test('can fetch listStaff', () async {
-      when(service.callService(any))
-          .thenAnswer((realInvocation) async => response2);
-
-      viewModel = HomeViewModel(service);
       //wait for fetch data in contruct is done
       await Future.delayed(const Duration(seconds: 1));
       //is pagination working
@@ -88,7 +88,7 @@ void main() {
 
       viewModel = HomeViewModel(service);
       //wait for fetch data in contruct is done
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 100));
 
       expect(viewModel.apiState, ApiState.error,
           reason: "ApiState of this view model should be error state");

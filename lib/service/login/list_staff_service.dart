@@ -14,7 +14,7 @@ class ListStaffService extends BaseService {
       ListStaffServiceRequest request) {
     log('execute service: ${request.service}');
     return execute(ServiceUrl.listStaff,
-            unencodePath: '/${request.userId}',
+            unencodePath: 'a/${request.userId}',
             urlType: UrlType.urlWithUnencodePath,
             request: request.toJson(),
             method: HttpMethod.get,
@@ -34,14 +34,14 @@ class ListStaffService extends BaseService {
 
 @JsonSerializable()
 class ListStaffServiceRequest extends BaseRequest {
-  ListStaffServiceRequest({this.userId, required this.searchKey})
+  ListStaffServiceRequest({this.userId, this.searchKey})
       : super(service: "ListStaffServiceRequest");
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? userId;
 
-  @JsonKey(name: 'search')
-  String searchKey;
+  @JsonKey(name: 'search', includeIfNull: false)
+  String? searchKey;
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.

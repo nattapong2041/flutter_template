@@ -117,7 +117,7 @@ class BaseService {
         var queryString = _generateQueryString(request);
         log("queryString: $queryString");
         log("header: $header");
-        log("final url: $url?$queryString");
+        log("final url: $url$queryString");
         var response =
             await client.get(Uri.parse('$url?$queryString'), headers: header);
         return response;
@@ -142,7 +142,9 @@ class BaseService {
   }
 
   String _generateQueryString(Map<String, dynamic> request) {
-    String result = "";
+    if (request.isEmpty) return "";
+
+    String result = "?";
     request.forEach((key, value) {
       if (value != null) {
         result += "$key=$value";

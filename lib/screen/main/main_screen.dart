@@ -43,8 +43,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     AppColors colors = Theme.of(context).extension<AppColors>()!;
+    ListStaffService service = ListStaffService();
     return ChangeNotifierProvider(
-      create: (context) => HomeViewModel(ListStaffService()),
+      create: (context) => HomeViewModel(service),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: PageView(

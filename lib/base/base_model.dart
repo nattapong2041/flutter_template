@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 class BaseRequest {
   BaseRequest({required this.service});
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String service;
 }
 

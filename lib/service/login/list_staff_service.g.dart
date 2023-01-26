@@ -9,14 +9,22 @@ part of 'list_staff_service.dart';
 ListStaffServiceRequest _$ListStaffServiceRequestFromJson(
         Map<String, dynamic> json) =>
     ListStaffServiceRequest(
-      searchKey: json['search'] as String,
+      searchKey: json['search'] as String?,
     );
 
 Map<String, dynamic> _$ListStaffServiceRequestToJson(
-        ListStaffServiceRequest instance) =>
-    <String, dynamic>{
-      'search': instance.searchKey,
-    };
+    ListStaffServiceRequest instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('search', instance.searchKey);
+  return val;
+}
 
 ListStaffServiceResponse _$ListStaffServiceResponseFromJson(
         Map<String, dynamic> json) =>

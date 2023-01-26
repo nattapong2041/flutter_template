@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 import '../../extension/colors.dart';
-import '../../localization/locale_view_model.dart';
 
 class DefaultAppbar extends StatelessWidget with PreferredSizeWidget {
   const DefaultAppbar({super.key, this.title});
@@ -18,7 +16,7 @@ class DefaultAppbar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       title: Text(title ?? AppLocalizations.of(context)!.app_title),
       backgroundColor: colors.primaryColor,
-      actions: [
+      actions: const [
         //! temporary disable language change button
         // Row(
         //   children: [
