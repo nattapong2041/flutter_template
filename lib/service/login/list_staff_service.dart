@@ -14,7 +14,7 @@ class ListStaffService extends BaseService {
       ListStaffServiceRequest request) {
     log('execute service: ${request.service}');
     return execute(ServiceUrl.listStaff,
-            unencodePath: 'a/${request.userId}',
+            unencodePath: '/${request.userId}',
             urlType: UrlType.urlWithUnencodePath,
             request: request.toJson(),
             method: HttpMethod.get,
