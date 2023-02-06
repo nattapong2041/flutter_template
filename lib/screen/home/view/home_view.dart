@@ -11,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../common/widget/loading_container.dart';
 import '../../../extension/colors.dart';
 import '../viewModel/home_view_model.dart';
+import 'items/home_item_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -80,7 +81,7 @@ class _ErrorDisplay extends StatelessWidget {
     final HomeViewModel viewModel = context.read<HomeViewModel>();
     final colors = Theme.of(context).extension<AppColors>()!;
     return RefreshIndicator(
-      color: colors.primaryColor,
+      color: colors.primary,
       onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -116,15 +117,16 @@ class _ListStaff extends StatelessWidget {
         return true;
       },
       child: RefreshIndicator(
-        color: colors.primaryColor,
+        color: colors.primary,
         onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
         child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
           controller: scrollController,
           itemCount: viewModel.listStaff.length,
           itemBuilder: ((context, index) => SizedBox(
-              height: 40.0,
-              child: Text(viewModel.listStaff[index].firstName ?? ""))),
+                height: 40.0,
+                child: HomeItem(viewModel.listStaff[index]),
+              )),
         ),
       ),
     );
@@ -139,7 +141,7 @@ class _ListEmpty extends StatelessWidget {
     final HomeViewModel viewModel = context.read<HomeViewModel>();
     final colors = Theme.of(context).extension<AppColors>()!;
     return RefreshIndicator(
-      color: colors.primaryColor,
+      color: colors.primary,
       onRefresh: () => viewModel.fetchListStaff(shouldRefresh: true),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

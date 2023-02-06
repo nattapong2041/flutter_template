@@ -62,17 +62,17 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavigationBarItem(
               icon: const Icon(Icons.home),
               label: 'Home',
-              backgroundColor: colors.primaryColor,
+              backgroundColor: colors.primary,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.chat),
               label: 'Chat',
-              backgroundColor: colors.primaryColor,
+              backgroundColor: colors.primary,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.settings),
               label: 'Setting',
-              backgroundColor: colors.primaryColor,
+              backgroundColor: colors.primary,
             ),
           ],
         ),

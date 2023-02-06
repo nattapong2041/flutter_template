@@ -24,12 +24,11 @@ abstract class BaseScreen {
         title: Text(
           title,
           style: textStyle.kanitBoldText
-              ?.copyWith(fontSize: 21, color: colors.primaryColor),
+              ?.copyWith(fontSize: 21, color: colors.primary),
         ),
         content: Text(
           message,
-          style:
-              textStyle.kanitNormalText?.copyWith(color: colors.primaryColor),
+          style: textStyle.kanitNormalText?.copyWith(color: colors.primary),
         ),
         actions: [
           if (onPressedCancle != null)
@@ -37,16 +36,15 @@ abstract class BaseScreen {
               onPressed: onPressedCancle,
               child: Text(
                 AppLocalizations.of(context)!.alert_cancle,
-                style: textStyle.kanitNormalText
-                    ?.copyWith(color: colors.primaryColor),
+                style:
+                    textStyle.kanitNormalText?.copyWith(color: colors.primary),
               ),
             ),
           TextButton(
             onPressed: onPressedOk ?? () => Navigator.pop(context, 'OK'),
             child: Text(
               AppLocalizations.of(context)!.alert_ok,
-              style: textStyle.kanitNormalText
-                  ?.copyWith(color: colors.primaryColor),
+              style: textStyle.kanitNormalText?.copyWith(color: colors.primary),
             ),
           ),
         ],

@@ -13,17 +13,48 @@ extension HexColor on Color {
 @immutable
 class AppColors extends ThemeExtension<AppColors> {
   const AppColors({
-    required this.primaryColor,
+    required this.primary,
+    required this.secondary,
+    required this.white,
+    required this.black,
+    required this.light,
+    required this.dark,
+    required this.success,
+    required this.warning,
     required this.danger,
   });
 
-  final Color? primaryColor;
+  final Color? primary;
+  final Color? secondary;
+  final Color? white;
+  final Color? black;
+  final Color? light;
+  final Color? dark;
+  final Color? success;
+  final Color? warning;
   final Color? danger;
 
   @override
-  ThemeExtension<AppColors> copyWith({Color? primaryColor, Color? danger}) {
+  ThemeExtension<AppColors> copyWith({
+    Color? primary,
+    Color? secondary,
+    Color? white,
+    Color? black,
+    Color? light,
+    Color? dark,
+    Color? success,
+    Color? warning,
+    Color? danger,
+  }) {
     return AppColors(
-      primaryColor: primaryColor ?? this.primaryColor,
+      primary: primary ?? this.primary,
+      secondary: secondary ?? this.secondary,
+      white: white ?? this.white,
+      black: black ?? this.black,
+      light: light ?? this.light,
+      dark: dark ?? this.dark,
+      success: success ?? this.success,
+      warning: warning ?? this.warning,
       danger: danger ?? this.danger,
     );
   }
@@ -34,12 +65,19 @@ class AppColors extends ThemeExtension<AppColors> {
       return this;
     }
     return AppColors(
-      primaryColor: Color.lerp(primaryColor, other.primaryColor, t),
+      primary: Color.lerp(primary, other.primary, t),
+      secondary: Color.lerp(secondary, other.secondary, t),
+      white: Color.lerp(white, other.white, t),
+      black: Color.lerp(black, other.black, t),
+      light: Color.lerp(light, other.light, t),
+      dark: Color.lerp(dark, other.dark, t),
+      success: Color.lerp(success, other.success, t),
+      warning: Color.lerp(warning, other.warning, t),
       danger: Color.lerp(danger, other.danger, t),
     );
   }
 
   // Optional
   @override
-  String toString() => 'MyColors(brandColor: $primaryColor, danger: $danger)';
+  String toString() => 'MyColors(brandColor: $primary, danger: $danger)';
 }
