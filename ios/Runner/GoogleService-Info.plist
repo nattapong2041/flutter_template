@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>914279297926-v99uv4g49u4e9db7m2bhem819bsv7v8h.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.914279297926-v99uv4g49u4e9db7m2bhem819bsv7v8h</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDyA-1MbovXTw3p1jGj0vfM22I2G-plN38</string>
+	<key>GCM_SENDER_ID</key>
+	<string>914279297926</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.flutterTemplate</string>
+	<key>PROJECT_ID</key>
+	<string>hospital-lover</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hospital-lover.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:914279297926:ios:785b3a405a79a6ec8f7207</string>
+</dict>
+</plist>

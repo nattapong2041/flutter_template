@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "914279297926",
+    "project_id": "hospital-lover",
+    "storage_bucket": "hospital-lover.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914279297926:android:606a532ebdf6acd48f7207",
+        "android_client_info": {
+          "package_name": "com.example.flutter_template"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914279297926-tss5fe05qbugdp9gerq5tuem0tkkqg9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUceYJchob-iY2nt2JTdzh4R8bt6kmVIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914279297926-nrmcs7okg0k4haquubrcv3o0u52cmmk7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "914279297926-v99uv4g49u4e9db7m2bhem819bsv7v8h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterTemplate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_template/screen/login/view/login_screen.dart';
+import 'package:flutter_template/screen/login/viewModel/login_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'common/app_route_name.dart';
@@ -9,6 +12,8 @@ import 'localization/locale_view_model.dart';
 import 'screen/main/main_screen.dart';
 
 void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const MyApp());
 }
 
@@ -18,10 +23,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => LocaleViewModel(const Locale('th')),
-      child:
-          Consumer<LocaleViewModel>(builder: (context, localeViewModel, child) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LoginViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => LocaleViewModel(const Locale('th'))),
+      ],
+      child: Consumer2<LocaleViewModel, LoginViewModel>(
+          builder: (context, localeViewModel, loginViewModel, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Template',
@@ -41,6 +50,7 @@ class MyApp extends StatelessWidget {
           //darkTheme: AppTheme.mainTheme,
           routes: {
             AppRouteName.home: (context) => const MainScreen(),
+            AppRouteName.login: (context) => LoginScreen(),
           },
           initialRoute: AppRouteName.home,
         );

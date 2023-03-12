@@ -5,6 +5,7 @@ import 'text_style.dart';
 
 class AppTheme {
   static get mainTheme => ThemeData(
+        useMaterial3: true,
         extensions: <ThemeExtension<dynamic>>[
           AppColors(
             primary: HexColor.fromHex("#00d1b2"),

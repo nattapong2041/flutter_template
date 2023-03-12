@@ -11,11 +11,11 @@ class DefaultAppbar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
   @override
   Widget build(BuildContext context) {
-    AppColors colors = Theme.of(context).extension<AppColors>()!;
+    //AppColors colors = Theme.of(context).extension<AppColors>()!;
     //final viewModel = context.read<LocaleViewModel>();
     return AppBar(
       title: Text(title ?? AppLocalizations.of(context)!.app_title),
-      backgroundColor: colors.primary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       actions: const [
         //! temporary disable language change button
         // Row(
